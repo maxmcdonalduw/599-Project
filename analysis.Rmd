@@ -38,40 +38,19 @@ references:
 \pagebreak
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r message=FALSE, warning=FALSE}
-# Check and load necessary packages
-if(require("lme4")){
-    print("lme4 is loaded correctly")
-} else {
-    print("trying to install lme4")
-    install.packages("lme4")
-    if(require(lme4)){
-        print("lme4 installed and loaded")
-    } else {
-        stop("could not install lme4")
-    }
-}
+#loading necessary packages
 
-if(require(haven)){
-    print("haven is loaded correctly")
-} else {
-    print("trying to install haven")
-    install.packages("haven")
-    if(require(haven)){
-        print("haven installed and loaded")
-    } else {
-        stop("could not install haven")
-    }
-}
-
+library(lme4)
+library(ggplot2)
 ```
 
 
 ```{r warning=FALSE}
-data <- read_dta("https://github.com/arsell/599-Project/blob/master/raw/HNBR62FL.DTA?raw=true")
+data <- read.csv("https://github.com/arsell/599-Project/blob/master/cleandata.csv?raw=true")
 ```
 
 # Introduction and Motivation
