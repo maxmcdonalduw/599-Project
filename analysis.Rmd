@@ -1,17 +1,101 @@
 ---
-title: "Untitled"
-output: pdf_document
+title: "Final Report"
+author: 
+- "Todd Albertson"
+- "Jenny Fingles"
+- "Max McDonald"
+- "Austin Sell"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+# abstract: "Abstract..."
+output:
+    pdf_document:
+      fig_caption: yes
+fontsize: 12pt
+geometry: margin=1in
+header-includes:
+    - \usepackage{setspace}
+    - \doublespacing
 ---
+
+---
+references:
+- id: FakeyShenanigans2019
+  title: "An example citation: Examples from an article of examples"
+  author:
+  - family: McFakerson
+    given: Fakey F.
+  - family: Shenanigans
+    given: Bull
+  container-title: QJBS
+  volume: 1
+  issue: 1
+  page: 50-90
+  type: article-journal
+  issued:
+    year: 2019
+---
+
+\pagebreak
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
-library(foreign)
-library(haven)
+```{r message=FALSE, warning=FALSE}
+# Check and load necessary packages
+if(require("lme4")){
+    print("lme4 is loaded correctly")
+} else {
+    print("trying to install lme4")
+    install.packages("lme4")
+    if(require(lme4)){
+        print("lme4 installed and loaded")
+    } else {
+        stop("could not install lme4")
+    }
+}
 
-data <- read_dta("https://github.com/arsell/599-Project/blob/master/raw/v13.dta?raw=true")
-data2 <- read_dta("https://github.com/arsell/599-Project/blob/master/raw/HNBR62FL.DTA?raw=true")
-data <- read_dta("v13.dta")
+if(require(haven)){
+    print("haven is loaded correctly")
+} else {
+    print("trying to install haven")
+    install.packages("haven")
+    if(require(haven)){
+        print("haven installed and loaded")
+    } else {
+        stop("could not install haven")
+    }
+}
+
 ```
+
+
+```{r warning=FALSE}
+data <- read_dta("https://github.com/arsell/599-Project/blob/master/raw/HNBR62FL.DTA?raw=true")
+```
+
+# Introduction and Motivation
+
+Here we can introduce our central research question. I don't believe citations are crucial to this project, but we can include them if necessary [@FakeyShenanigans2019].
+
+# Data
+
+Here is where we explain where the data comes from. Any descriptive statistics would be included here.
+
+# Analysis
+
+In this section we explain how our model is set up and any necessary assumptions. Model selection criteria should be included here as well.
+
+# Results
+
+We present the results of the model, including tables and/or figures. This should have the direct numerical interpretation of the key coefficients.
+
+# Conclusion
+
+Discussion of the substantive interpretation of the model, including any meaningful impact of findings as well as limitations of model.
+
+\pagebreak
+
+# References
+
+
