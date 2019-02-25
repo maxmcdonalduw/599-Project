@@ -50,7 +50,7 @@ library(ggplot2)
 
 
 ```{r warning=FALSE}
-data <- read.csv("https://github.com/arsell/599-Project/blob/master/cleandata.csv?raw=true")
+data <- read.csv("https://github.com/arsell/599-Project/blob/master/data/cleandata.csv?raw=true")
 ```
 
 # Introduction and Motivation
