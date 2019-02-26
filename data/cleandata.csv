@@ -722,7 +722,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 57181  2,6.0,46,Evangelical / Protestant,Atl?ntida,Middle,5862,0
 57182  2,6.0,17,Evangelical / Protestant,Atl?ntida,Middle,-19506,0
 58 11  2,6.0,31,Evangelical / Protestant,Atl?ntida,Poorer,-33352,0
-58 31  5,3.0,39,,Atl?ntida,Poorer,-91078,0
 58 31  8,5.0,35,Evangelical / Protestant,Atl?ntida,Poorer,-91078,0
 58 31 11,6.0,27,Evangelical / Protestant,Atl?ntida,Poorer,-91078,0
 58 71  2,6.0,38,Catholic,Atl?ntida,Poorer,-39123,0
@@ -1579,7 +1578,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 117131  2,6.0,27,Catholic,Comayagua,Poorer,-64681,1
 117141  4,11.0,34,Catholic,Comayagua,Middle,-22327,1
 117151  2,6.0,28,Catholic,Comayagua,Richer,50982,1
-117161  1,6.0,45,,Comayagua,Poorer,-49659,1
 117161  3,6.0,26,Catholic,Comayagua,Poorer,-49659,1
 117171  2,3.0,27,Catholic,Comayagua,Middle,-21590,1
 117181  2,9.0,19,Evangelical / Protestant,Comayagua,Poorer,-52379,1
@@ -2802,7 +2800,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 203161  2,3.0,42,Evangelical / Protestant,Cop?n,Richest,120773,0
 203171  2,7.0,23,Evangelical / Protestant,Cop?n,Richer,95851,0
 203181  1,3.0,37,Evangelical / Protestant,Cop?n,Poorest,-91789,0
-203182  2,6.0,26,,Cop?n,Poorer,-79436,0
 203191  2,3.0,45,Evangelical / Protestant,Cop?n,Middle,15305,0
 203201  2,3.0,48,Evangelical / Protestant,Cop?n,Poorer,-58117,0
 204 11  5,6.0,31,Catholic,Cop?n,Poorest,-108802,0
@@ -3014,7 +3011,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 219 22  1,1.0,30,Evangelical / Protestant,Cop?n,Poorer,-87656,0
 219 32  2,3.0,27,Evangelical / Protestant,Cop?n,Poorer,-89961,0
 219 41  2,2.0,33,Evangelical / Protestant,Cop?n,Poorer,-84622,0
-219 51  2,3.0,33,,Cop?n,Poorer,-72161,0
 219 61  2,0.0,38,Catholic,Cop?n,Poorest,-111704,0
 219 61  3,0.0,20,Catholic,Cop?n,Poorest,-111704,0
 219 71  2,2.0,33,Catholic,Cop?n,Poorest,-117401,0
@@ -3603,7 +3599,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 268 81  7,4.0,41,Evangelical / Protestant,Cort?s,Middle,17865,1
 268 91  1,10.0,44,No religion,Cort?s,Richer,112243,1
 268 91  4,10.0,19,Evangelical / Protestant,Cort?s,Richer,112243,1
-268101  2,6.0,31,,Cort?s,Richer,75637,1
 268111  1,13.0,40,Evangelical / Protestant,Cort?s,Richer,50165,1
 268121  1,6.0,39,Evangelical / Protestant,Cort?s,Richer,117322,1
 268131  1,3.0,38,Evangelical / Protestant,Cort?s,Richer,54934,1
@@ -4618,7 +4613,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 355161  2,6.0,19,Evangelical / Protestant,Cort?s,Richer,78405,0
 355171  2,6.0,40,Evangelical / Protestant,Cort?s,Richest,141685,0
 355181  2,6.0,26,Evangelical / Protestant,Cort?s,Richer,109198,0
-355201  2,7.0,31,,Cort?s,Richer,57761,0
 356 21  1,1.0,29,Catholic,Cort?s,Richer,50750,0
 356 31  2,4.0,24,Catholic,Cort?s,Poorer,-86332,0
 356 51  3,2.0,34,No religion,Cort?s,Middle,-27754,0
@@ -6163,7 +6157,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 465 21  2,6.0,33,No religion,El Para?so,Poorer,-65158,0
 465 31  2,1.0,25,Evangelical / Protestant,El Para?so,Poorest,-102348,0
 465 51  6,2.0,29,No religion,El Para?so,Poorer,-80026,0
-465 61  2,16.0,48,,El Para?so,Middle,33824,0
 465 71  2,6.0,43,Evangelical / Protestant,El Para?so,Poorer,-33878,0
 465 91  2,8.0,23,Evangelical / Protestant,El Para?so,Middle,21439,0
 465101  2,2.0,44,Evangelical / Protestant,El Para?so,Poorer,-80834,0
@@ -7112,7 +7105,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 542111  4,7.0,26,Catholic,Francisco Moraz?n,Richer,92858,1
 542151  1,6.0,33,Catholic,Francisco Moraz?n,Richest,123882,1
 542161  2,12.0,27,Evangelical / Protestant,Francisco Moraz?n,Richer,114057,1
-542171  4,7.0,27,,Francisco Moraz?n,Richer,74865,1
 542181  1,7.0,33,Catholic,Francisco Moraz?n,Richer,65097,1
 542191  1,6.0,43,Catholic,Francisco Moraz?n,Middle,18471,1
 543 11  2,13.0,33,Evangelical / Protestant,Francisco Moraz?n,Richer,82425,1
@@ -8145,7 +8137,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 617 91  2,3.0,22,No religion,Francisco Moraz?n,Poorer,-55300,0
 617101  2,6.0,33,Catholic,Francisco Moraz?n,Poorer,-83926,0
 617111  2,3.0,46,Catholic,Francisco Moraz?n,Middle,26711,0
-617111  7,6.0,26,,Francisco Moraz?n,Middle,26711,0
 617121  2,11.0,35,Catholic,Francisco Moraz?n,Middle,4970,0
 617131  2,2.0,46,Catholic,Francisco Moraz?n,Poorer,-33007,0
 617141  2,6.0,37,Catholic,Francisco Moraz?n,Poorer,-80765,0
@@ -8577,14 +8568,12 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 643 11  6,5.0,37,Catholic,Gracias a Dios,Poorest,-175220,0
 643 21  2,3.0,47,Catholic,Gracias a Dios,Poorer,-73349,0
 643 21  6,9.0,23,Catholic,Gracias a Dios,Poorer,-73349,0
-643 41  1,5.0,22,,Gracias a Dios,Poorest,-132872,0
 643 81  2,6.0,32,Catholic,Gracias a Dios,Poorest,-146790,0
 643 91  2,3.0,46,Catholic,Gracias a Dios,Poorest,-146666,0
 643101  2,4.0,25,Catholic,Gracias a Dios,Poorest,-158129,0
 643131  1,4.0,38,Catholic,Gracias a Dios,Poorest,-94844,0
 643141  2,4.0,31,Catholic,Gracias a Dios,Poorest,-99638,0
 643151  2,0.0,41,Catholic,Gracias a Dios,Poorest,-143549,0
-643161  2,4.0,30,,Gracias a Dios,Poorest,-114117,0
 643181  2,0.0,41,Catholic,Gracias a Dios,Poorest,-138918,0
 644 11  3,1.0,42,Evangelical / Protestant,Gracias a Dios,Poorest,-125955,0
 644 21  2,3.0,46,Evangelical / Protestant,Gracias a Dios,Poorest,-162489,0
@@ -9960,7 +9949,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 738131  2,6.0,29,Evangelical / Protestant,Islas de la Bah?a,Richer,52690,0
 738141  2,6.0,40,Evangelical / Protestant,Islas de la Bah?a,Middle,12523,0
 738151  1,5.0,27,No religion,Islas de la Bah?a,Richer,99529,0
-738151  5,8.0,23,,Islas de la Bah?a,Richer,99529,0
 738181  1,5.0,48,Evangelical / Protestant,Islas de la Bah?a,Richer,111551,0
 738191  1,16.0,36,Evangelical / Protestant,Islas de la Bah?a,Richer,81017,0
 738201  5,7.0,20,No religion,Islas de la Bah?a,Middle,-14337,0
@@ -12021,7 +12009,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 875 51  2,6.0,26,Catholic,Ocotepeque,Poorer,-85153,0
 875 61  3,6.0,23,Catholic,Ocotepeque,Middle,-22477,0
 875 61  5,13.0,18,Catholic,Ocotepeque,Middle,-22477,0
-875 91  2,12.0,23,,Ocotepeque,Poorer,-31292,0
 875111  3,12.0,39,Catholic,Ocotepeque,Poorer,-75103,0
 875131  2,2.0,34,Catholic,Ocotepeque,Poorer,-84777,0
 875141  1,0.0,42,Catholic,Ocotepeque,Poorer,-54256,0
@@ -12539,7 +12526,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 910111  1,6.0,24,Evangelical / Protestant,Olancho,Richer,92552,1
 910121  1,3.0,43,Evangelical / Protestant,Olancho,Middle,12420,1
 910121  5,6.0,27,Evangelical / Protestant,Olancho,Middle,12420,1
-910131  5,16.0,41,,Olancho,Richest,122540,1
 910141  3,7.0,37,No religion,Olancho,Richer,69872,1
 910161  2,12.0,39,Catholic,Olancho,Richest,144931,1
 910171  2,2.0,29,No religion,Olancho,Middle,-29505,1
@@ -12762,7 +12748,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 928161  2,6.0,37,Catholic,Olancho,Richer,77062,0
 928191  2,6.0,40,Catholic,Olancho,Poorer,-84547,0
 929 11  2,6.0,38,Catholic,Olancho,Richer,71259,0
-929 12  2,6.0,19,,Olancho,Richer,54201,0
 929 21  2,6.0,36,Catholic,Olancho,Poorest,-97090,0
 929 31  2,1.0,48,Evangelical / Protestant,Olancho,Richer,69294,0
 929 81  2,9.0,37,Catholic,Olancho,Richest,169664,0
@@ -12793,7 +12778,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 931 31  2,2.0,44,Evangelical / Protestant,Olancho,Middle,-22222,0
 931 41  2,2.0,37,Evangelical / Protestant,Olancho,Poorest,-101142,0
 931 51  2,4.0,21,Evangelical / Protestant,Olancho,Poorest,-110407,0
-931 61  5,6.0,23,,Olancho,Poorest,-91952,0
 931 71  2,3.0,44,Evangelical / Protestant,Olancho,Poorest,-117974,0
 931 71  8,4.0,28,Evangelical / Protestant,Olancho,Poorest,-117974,0
 931 81  2,5.0,37,Evangelical / Protestant,Olancho,Poorest,-95408,0
@@ -14524,7 +14508,6 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 1054201  2,0.0,46,Catholic,Valle,Poorest,-137120,0
 1055 51  4,6.0,29,Evangelical / Protestant,Valle,Poorer,-67590,0
 1055 61  2,6.0,30,Catholic,Valle,Middle,18777,0
-1055 71  3,11.0,24,,Valle,Middle,-24024,0
 1055 91  2,6.0,36,Evangelical / Protestant,Valle,Richer,55838,0
 1055101  1,6.0,35,Evangelical / Protestant,Valle,Poorer,-90152,0
 1055121  1,13.0,31,Catholic,Valle,Middle,45129,0

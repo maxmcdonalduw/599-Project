@@ -38,10 +38,10 @@ references:
 \pagebreak
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
 ```
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 #loading necessary packages
 
 library(lme4)
@@ -49,8 +49,13 @@ library(ggplot2)
 ```
 
 
-```{r warning=FALSE}
+```{r}
 data <- read.csv("https://github.com/arsell/599-Project/blob/master/data/cleandata.csv?raw=true")
+```
+
+```{r}
+fit0 <- lm(educ ~ religion, data=data)
+summary(fit0)
 ```
 
 # Introduction and Motivation
