@@ -1,0 +1,80 @@
+---
+title: "Final Report"
+author: 
+- "Todd Albertson"
+- "Jenny Fingles"
+- "Max McDonald"
+- "Austin Sell"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+# abstract: "Abstract..."
+output:
+    pdf_document:
+      fig_caption: yes
+fontsize: 12pt
+geometry: margin=1in
+header-includes:
+    - \usepackage{setspace}
+    - \doublespacing
+---
+
+---
+references:
+- id: FakeyShenanigans2019
+  title: "An example citation: Examples from an article of examples"
+  author:
+  - family: McFakerson
+    given: Fakey F.
+  - family: Shenanigans
+    given: Bull
+  container-title: QJBS
+  volume: 1
+  issue: 1
+  page: 50-90
+  type: article-journal
+  issued:
+    year: 2019
+---
+
+\pagebreak
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r message=FALSE, warning=FALSE}
+#loading necessary packages
+
+library(lme4)
+library(ggplot2)
+```
+
+
+```{r warning=FALSE}
+data <- read.csv("https://github.com/arsell/599-Project/blob/master/data/cleandata.csv?raw=true")
+```
+
+# Introduction and Motivation
+
+Here we can introduce our central research question. I don't believe citations are crucial to this project, but we can include them if necessary [@FakeyShenanigans2019].
+
+# Data
+
+Here is where we explain where the data comes from. Any descriptive statistics would be included here.
+
+# Analysis
+
+In this section we explain how our model is set up and any necessary assumptions. Model selection criteria should be included here as well.
+
+# Results
+
+We present the results of the model, including tables and/or figures. This should have the direct numerical interpretation of the key coefficients.
+
+# Conclusion
+
+Discussion of the substantive interpretation of the model, including any meaningful impact of findings as well as limitations of model.
+
+\pagebreak
+
+# References
+
+
