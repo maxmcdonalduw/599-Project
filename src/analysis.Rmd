@@ -54,8 +54,13 @@ data <- read.csv("https://github.com/arsell/599-Project/blob/master/data/cleanda
 ```
 
 ```{r}
-fit0 <- lm(educ ~ religion, data=data)
+data$religion <- relevel(data$religion, ref="Other")
+
+fit0 <- lm(educ ~ religion + age + region + wealthCat + urban, data=data)
 summary(fit0)
+
+fit1 <- lmer(educ ~ religion + age + wealthCat + urban + (1|region), data = data)
+summary(fit1)
 ```
 
 # Introduction and Motivation
