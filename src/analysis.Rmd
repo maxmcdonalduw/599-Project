@@ -51,16 +51,100 @@ library(ggplot2)
 
 ```{r}
 data <- read.csv("https://github.com/arsell/599-Project/blob/master/data/cleandata.csv?raw=true")
+data <- na.omit(data)
+```
+
+```{r}
+# Investigate age vs educ relationship
+p1 <- ggplot(data = data,
+             aes(x = age,
+                 y = educ)) +
+  geom_point(position = "jitter") +
+  stat_smooth(geom = "smooth")
+
+p1
 ```
 
 ```{r}
 data$religion <- relevel(data$religion, ref="Other")
 
-fit0 <- lm(educ ~ religion + age + region + wealthCat + urban, data=data)
-summary(fit0)
-
-fit1 <- lmer(educ ~ religion + age + wealthCat + urban + (1|region), data = data)
+fit1 <- lm(educ ~ religion + age + region + wealthCat + urban, data=data)
 summary(fit1)
+
+
+
+fit2 <- lmer(educ ~ religion + age + wealthCat + urban + (1|region),
+             data = data,
+             REML = FALSE)
+summary(fit2)
+
+data$age2 <- data$age^2
+
+fit3 <- lm(educ ~ religion + age + age2 + region + wealthCat + urban, data=data)
+summary(fit3)
+
+fit4 <- lmer(educ ~ religion + age + age2 + wealthCat + urban + (1|region),
+             data = data,
+             REML = FALSE)
+summary(fit4)
+```
+
+```{r}
+fit <- list(fit1, fit2, fit3, fit4)
+
+
+bic.list <- NULL
+for (i in 1:length(fit)){
+  bic.list <- BIC(fit[[i]])
+}
+
+
+err.fit1 <- NULL
+for (i in 1:nrow(data)){
+  data.cv <- data[-i,]
+  fit.cv <- lm(educ ~ religion + age + region + wealthCat + urban, data=data.cv)
+  yhat <- predict(fit.cv, data[i,])
+  err.fit1[i] <- abs(data$educ[i] - yhat)
+}
+
+err.fit2 <- NULL
+for (i in 1:nrow(data)){
+  data.cv <- data[-i,]
+  fit.cv <- lmer(educ ~ religion + age + wealthCat + urban + (1|region),
+             data = data.cv,
+             REML = FALSE)
+  yhat <- predict(fit.cv, data[i,])
+  err.fit2[i] <- abs(data$educ[i] - yhat)
+}
+
+err.fit3 <- NULL
+for (i in 1:nrow(data)){
+  if (i%%1000==0){
+    print(paste0("Iteration ", i, ": ", Sys.time()))
+  }
+  data.cv <- data[-i,]
+  fit.cv <- lm(educ ~ religion + age + age2 + region + wealthCat + urban, data=data.cv)
+  yhat <- predict(fit.cv, data[i,])
+  err.fit3[i] <- abs(data$educ[i] - yhat)
+}
+
+err.fit4 <- NULL
+for (i in 1:nrow(data)){
+  if (i%%500==0){
+    print(paste0("Iteration ", i, ": ", Sys.time()))
+  }
+  data.cv <- data[-i,]
+  fit.cv <- lmer(educ ~ religion + age + age2 + wealthCat + urban + (1|region),
+             data = data.cv,
+             REML = FALSE)
+  yhat <- predict(fit.cv, data[i,])
+  err.fit4[i] <- abs(data$educ[i] - yhat)
+}
+
+mae1 <- mean(err.fit1)
+mae2 <- mean(err.fit2)
+mae3 <- mean(err.fit3)
+mae4 <- mean(err.fit4)
 ```
 
 # Introduction and Motivation
@@ -74,6 +158,14 @@ Here is where we explain where the data comes from. Any descriptive statistics w
 # Analysis
 
 In this section we explain how our model is set up and any necessary assumptions. Model selection criteria should be included here as well.
+
+
+| Model | BIC           | MAE      |
+|:-----:|:-------------:|:--------:|
+| 1     | `r BIC(fit1)` | `r mae1` |
+| 2     | `r BIC(fit2)` | `r mae2` |
+| 3     | `r BIC(fit3)` | `r mae3` |
+| 4     | `r BIC(fit4)` | `r mae4` |
 
 # Results
 
