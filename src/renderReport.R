@@ -6,3 +6,4 @@ setwd(dirname(current_path ))
 
 output_dir <- "../results"
 render("analysis.Rmd", output_dir = output_dir)
+

@@ -101,53 +101,12 @@ for (i in 1:length(fit)){
   bic.list <- BIC(fit[[i]])
 }
 
+source("functions.R")
 
-err.fit1 <- NULL
-for (i in 1:nrow(data)){
-  data.cv <- data[-i,]
-  fit.cv <- lm(educ ~ religion + age + region + wealthCat + urban, data=data.cv)
-  yhat <- predict(fit.cv, data[i,])
-  err.fit1[i] <- abs(data$educ[i] - yhat)
-}
-
-err.fit2 <- NULL
-for (i in 1:nrow(data)){
-  data.cv <- data[-i,]
-  fit.cv <- lmer(educ ~ religion + age + wealthCat + urban + (1|region),
-             data = data.cv,
-             REML = FALSE)
-  yhat <- predict(fit.cv, data[i,])
-  err.fit2[i] <- abs(data$educ[i] - yhat)
-}
-
-err.fit3 <- NULL
-for (i in 1:nrow(data)){
-  if (i%%1000==0){
-    print(paste0("Iteration ", i, ": ", Sys.time()))
-  }
-  data.cv <- data[-i,]
-  fit.cv <- lm(educ ~ religion + age + age2 + region + wealthCat + urban, data=data.cv)
-  yhat <- predict(fit.cv, data[i,])
-  err.fit3[i] <- abs(data$educ[i] - yhat)
-}
-
-err.fit4 <- NULL
-for (i in 1:nrow(data)){
-  if (i%%500==0){
-    print(paste0("Iteration ", i, ": ", Sys.time()))
-  }
-  data.cv <- data[-i,]
-  fit.cv <- lmer(educ ~ religion + age + age2 + wealthCat + urban + (1|region),
-             data = data.cv,
-             REML = FALSE)
-  yhat <- predict(fit.cv, data[i,])
-  err.fit4[i] <- abs(data$educ[i] - yhat)
-}
-
-mae1 <- mean(err.fit1)
-mae2 <- mean(err.fit2)
-mae3 <- mean(err.fit3)
-mae4 <- mean(err.fit4)
+mae1 <- get_mae(fit1, data, method="lm")
+mae2 <- get_mae(fit2, data, method="lmer")
+mae3 <- get_mae(fit3, data, method="lm")
+mae4 <- get_mae(fit4, data, method="lmer")
 ```
 
 # Introduction and Motivation
