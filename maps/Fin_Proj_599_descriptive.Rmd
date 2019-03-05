@@ -1,0 +1,53 @@
+---
+title: "Educational Attainment in Honduras"
+author: "Max H. McDonald"
+date: "February 19, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## This file contains background mapping and graphing work for the final project
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Set working directory and bring in the data and libraries
+
+setwd("C:/Users/mdjmcdonald/Desktop/Final_Project/599/599-Project/maps")
+honduras_data <- read.csv("cleandata.csv")
+
+
+
+library(MASS)
+library(maps)
+library(RColorBrewer)
+library(maptools)
+library(sp)
+library(spdep)
+library(ggplot2)
+library(rgdal)
+library(foreign)
+library(haven)
+
+
+```
+
+# input data file
+
+
+
+
+
+# Make sure all three files are in the current directory
+
+shapehonduras <- readShapePoly("C:/Users/mdjmcdonald/Desktop/Final_Project/599/gadm36_HND_1.shp")
+png(filename="honduras1.png", width = 1000, height = 1000)
+plot(shapehonduras)
+dev.off()
+
+
