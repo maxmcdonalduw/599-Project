@@ -1,7 +1,7 @@
 ---
 title: "Educational Attainment in Honduras"
 author: "Max H. McDonald"
-date: "February 19, 2019"
+date: "`r Sys.Date()`"
 output: pdf_document
 ---
 
@@ -19,7 +19,6 @@ knitr::opts_chunk$set(echo = TRUE)
 # Set working directory and bring in the data and libraries
 
 setwd("C:/Users/mdjmcdonald/Desktop/Final_Project/599/599-Project/maps")
-honduras_data <- read.csv("cleandata.csv")
 
 
 
@@ -33,21 +32,123 @@ library(ggplot2)
 library(rgdal)
 library(foreign)
 library(haven)
+library(expss)
+library(histogram)
 
+
+honduras_data <- read.csv("cleandata.csv")
+geodata_spatial <- readOGR(dsn ="HNGE61FL.shp")
 
 ```
 
-# input data file
 
 
 
 
 
-# Make sure all three files are in the current directory
-
-shapehonduras <- readShapePoly("C:/Users/mdjmcdonald/Desktop/Final_Project/599/gadm36_HND_1.shp")
-png(filename="honduras1.png", width = 1000, height = 1000)
-plot(shapehonduras)
-dev.off()
 
 
+
+## Explore
+str(honduras_data)
+str(geodata_spatial)
+head(honduras_data)
+head(geodata_spatial)
+
+
+
+## Tables and Summary Statistics
+
+cro(honduras_data$region, honduras_data$educ)
+cro(honduras_data$region, honduras_data$religion)
+
+
+
+## Summaries of key variables
+summary(honduras_data)
+summary(honduras_data$region)
+summary(honduras_data$wealthCat)
+summary(honduras_data$educ)
+
+
+
+
+## Plots, histograms
+histogram(honduras_data$educ)
+histogram(honduras_data$urban)
+
+
+plot(honduras_data$wealthCat,main="Wealth Category")
+plot(honduras_data$educ, honduras_data$region) # this is nonsensical
+plot(honduras_data$educ, honduras_data$wealthCat) # this is nonsensical
+
+
+barplot(table(honduras_data$wealthCat), main = "Wealth Category")
+barplot(table(honduras_data$urban))
+barplot(honduras_data$educ)
+
+
+## Subsets
+
+hndata_urban <- honduras_data[which(honduras_data$urban==1), ]
+hndata_rural <- honduras_data[which(honduras_data$urban==0), ]
+
+hndata_dense <- honduras_data[which(honduras_data$region == 'Cortes' |honduras_data$region == 'Francisco Morazan'), ]
+
+summary(hndata_dense$age)
+
+
+## Visuals
+
+years of education -- average years by region/cluster 
+wealth category by region -- stacked by urban rural -- densities by region 
+urban vs rural -- split up wealth by urban and rural
+
+
+
+
+
+
+library(randomcoloR)
+library(reshape)
+
+## Merging the two data frames by the unique cluster value
+
+# region boundaries
+temp_honduras_data <- honduras_data[, c('region', 'cluster')]
+temp_honduras_data <- unique(temp_honduras_data)
+
+# wealth categories
+honduras_wc <- honduras_data[, c('cluster', 'wealthCat')]
+honduras_wc <- unique(honduras_wc)
+
+
+DFW <- merge(x=geodata_spatial, y=temp_honduras_data, by.x = "DHSCLUST", by.y = "cluster")
+DFW
+
+temp_which <-which(DFW$LATNUM != 0 & DFW$LONGNUM != 0)
+DFW <- DFW[temp_which, ]
+
+n_regions <- unique(as.character(DFW@data$region))
+n_regions
+
+n_colors <- distinctColorPalette(k=length(n_regions))
+
+plot(DFW,
+     col=(n_colors)[DFW$region],
+     pch=16)
+
+View(DFW@data)
+
+
+## Want to aggregate honduras_data by cluster
+
+agg_honduras <- aggregate(list(category_count = honduras_data$wealthCat), by = list(cluster = honduras_data$cluster, wealthcat = honduras_data$wealthCat), FUN = length)
+
+agg_reshape <- reshape(data = agg_honduras, direction = 'wide', idvar = 'cluster', timevar = 'wealthcat')
+
+new_honduras <- merge(x=DFW, y=agg_reshape, by.x = "DHSCLUST", by.y = "cluster")
+
+plot(new_honduras,
+     col=(n_colors)[DFW$wealthcat],
+     pch=16)
