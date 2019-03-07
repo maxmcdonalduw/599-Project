@@ -42,7 +42,7 @@ geodata_spatial <- readOGR(dsn ="HNGE61FL.shp")
 ```
 
 
-
+rm(list = ls())
 
 
 
@@ -115,15 +115,15 @@ library(reshape)
 ## Merging the two data frames by the unique cluster value
 
 # region boundaries
-temp_honduras_data <- honduras_data[, c('region', 'cluster')]
+temp_honduras_data <- honduras_data[, c('region', 'DHSCLUST')]
 temp_honduras_data <- unique(temp_honduras_data)
 
 # wealth categories
-honduras_wc <- honduras_data[, c('cluster', 'wealthCat')]
+honduras_wc <- honduras_data[, c('DHSCLUST', 'wealthCat')]
 honduras_wc <- unique(honduras_wc)
 
 
-DFW <- merge(x=geodata_spatial, y=temp_honduras_data, by.x = "DHSCLUST", by.y = "cluster")
+DFW <- merge(x=geodata_spatial, y=temp_honduras_data, by.x = "DHSCLUST", by.y = "DHSCLUST")
 DFW
 
 temp_which <-which(DFW$LATNUM != 0 & DFW$LONGNUM != 0)
@@ -136,18 +136,18 @@ n_colors <- distinctColorPalette(k=length(n_regions))
 
 plot(DFW,
      col=(n_colors)[DFW$region],
-     pch=16)
+     pch=8)
 
 View(DFW@data)
 
 
 ## Want to aggregate honduras_data by cluster
 
-agg_honduras <- aggregate(list(category_count = honduras_data$wealthCat), by = list(cluster = honduras_data$cluster, wealthcat = honduras_data$wealthCat), FUN = length)
+agg_honduras <- aggregate(list(category_count = honduras_data$wealthCat), by = list(cluster = honduras_data$DHSCLUST, wealthcat = honduras_data$wealthCat), FUN = length)
 
 agg_reshape <- reshape(data = agg_honduras, direction = 'wide', idvar = 'cluster', timevar = 'wealthcat')
 
-new_honduras <- merge(x=DFW, y=agg_reshape, by.x = "DHSCLUST", by.y = "cluster")
+new_honduras <- merge(x=DFW, y=agg_reshape, by.x = "DHSCLUST", by.y = "DHSCLUST")
 
 plot(new_honduras,
      col=(n_colors)[DFW$wealthcat],
