@@ -46,6 +46,8 @@ knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
 
 library(lme4)
 library(ggplot2)
+library(dplyr)
+library(effects)
 
 options(scipen = 999)
 options(digits = 6)
@@ -68,7 +70,7 @@ p1 <- ggplot(data = data,
 p1
 ```
 
-```{r}
+```{r echo=TRUE, results='hide'}
 data$religion <- relevel(data$religion, ref="Other")
 
 fit1 <- lm(educ ~ religion + age + region + wealthCat + urban, data=data)
@@ -90,10 +92,28 @@ fit4 <- lmer(educ ~ religion + age + age2 + wealthCat + urban + (1|region),
              data = data,
              REML = FALSE)
 summary(fit4)
+
+fit5 <- lm(educ ~ religion + age + wealthCat*region + urban, data = data)
+summary(fit5)
+
+fit6 <- lmer(educ ~ (1|region),
+             data = data,
+             REML = FALSE)
+summary(fit6)
+
+fit7 <- lmer(educ ~ religion + age + urban + (1 + wealthCat|region),
+             data = data,
+             REML = FALSE)
+summary(fit7)
+
+fit8 <- lmer(educ ~ religion + age + urban + wealthCat + (1 + wealthCat|region),
+             data = data,
+             REML = FALSE)
+summary(fit8)
 ```
 
 ```{r}
-fit <- list(fit1, fit2, fit3, fit4)
+fit <- list(fit1, fit2, fit3, fit4, fit5, fit6, fit7, fit8)
 
 
 bic.list <- NULL
@@ -102,11 +122,54 @@ for (i in 1:length(fit)){
 }
 
 source("functions.R")
+```
+
+```{r eval=FALSE}
+# WARNING: Cross-Validation take a substantial amount of time to run and is not evaluated by default.
+
+
+#Running in serial
 
 mae1 <- get_mae(fit1, data, method="lm")
 mae2 <- get_mae(fit2, data, method="lmer")
 mae3 <- get_mae(fit3, data, method="lm")
 mae4 <- get_mae(fit4, data, method="lmer")
+mae5 <- get_mae(fit5, data, method="lm")
+mae6 <- get_mae(fit6, data, method="lmer")
+mae7 <- get_mae(fit7, data, method="lmer")
+mae8 <- get_mae(fit8, data, method="lmer")
+```
+
+```{r eval=FALSE}
+# WARNING: Cross-Validation take a substantial amount of time to run and is not evaluated by default.
+# Additionally, this chunk is written to take advantage of parallel processing on multiple cores. It should not be run in conjunction with the above chunk.
+
+
+# Running in parallel
+library(parallel)
+library(foreach)
+library(doParallel)
+
+numCores <- detectCores()
+registerDoParallel(numCores)
+
+mae <- foreach (i=1:length(fit), .combine = c) %dopar% {
+  if (i == 1 | i == 3 | i == 5){
+    get_mae_lm(fit[[i]], data)
+  } else {
+    get_mae_lmer(fit[[i]], data)
+  }
+}
+
+mae1 <- mae[1] # 2.496750
+mae2 <- mae[2] # 2.496738
+mae3 <- mae[3] # 2.496008
+mae4 <- mae[4] # 2.495984
+mae5 <- mae[5] # 2.490587
+mae6 <- mae[6] # 3.051729
+mae7 <- mae[7] # 2.489470
+mae8 <- mae[8] # 2.487023
+
 ```
 
 # Introduction and Motivation
@@ -122,16 +185,37 @@ Here is where we explain where the data comes from. Any descriptive statistics w
 In this section we explain how our model is set up and any necessary assumptions. Model selection criteria should be included here as well.
 
 
-| Model | BIC           | MAE      |
-|:-----:|:-------------:|:--------:|
-| 1     | `r BIC(fit1)` | `r mae1` |
-| 2     | `r BIC(fit2)` | `r mae2` |
-| 3     | `r BIC(fit3)` | `r mae3` |
-| 4     | `r BIC(fit4)` | `r mae4` |
 
 # Results
 
 We present the results of the model, including tables and/or figures. This should have the direct numerical interpretation of the key coefficients.
+
+```{r}
+
+effs <- as.data.frame(effect(c("wealthCat"), fit4))
+
+data.p1 <- data %>%
+  group_by(wealthCat) %>%
+  summarise(prop_urban = mean(urban))
+effs <- cbind(effs, data.p1[,2])
+
+effs$wealthCat <- reorder(effs$wealthCat, effs$fit)
+
+wealth_bar <- ggplot(effs,
+                     aes(x = wealthCat,
+                         y = fit, 
+                         fill = prop_urban)) +
+  geom_col() +
+  geom_errorbar(aes(ymin = lower,
+                    ymax = upper),
+                width=0.2) +
+  xlab("Wealth Category") +
+  ylab("Predicted Years of Education") +
+  labs(fill = "% Urban") +
+  ggtitle("Predicted Education by Wealth")
+
+wealth_bar
+```
 
 # Conclusion
 
