@@ -1,3 +1,4 @@
+
 caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 1 21  1,6.0,40,Evangelical / Protestant,Atlantida,Richer,72182,1
 1 21  9,6.0,21,Evangelical / Protestant,Atlantida,Richer,72182,1
@@ -15836,3 +15837,4 @@ caseid,educ,age,religion,region,wealthCat,wealthDec,urban
 1150191  1,4.0,38,No religion,Yoro,Middle,-17494,0
 1150201  2,0.0,47,Evangelical / Protestant,Yoro,Poorer,-51577,0
 1150201  7,15.0,20,No religion,Yoro,Poorer,-51577,0
+
