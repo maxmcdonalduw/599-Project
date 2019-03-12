@@ -48,6 +48,7 @@ library(lme4)
 library(ggplot2)
 library(dplyr)
 library(effects)
+library(knitr)
 
 options(scipen = 999)
 options(digits = 6)
@@ -179,6 +180,18 @@ Here we can introduce our central research question. I don't believe citations a
 # Data
 
 Here is where we explain where the data comes from. Any descriptive statistics would be included here.
+
+```{r out.width= "85%"}
+include_graphics("../maps/avgs_by_region1.pdf")
+```
+
+```{r out.width= "85%"}
+include_graphics("../maps/avgs_by_region2.pdf")
+```
+
+```{r out.width= "85%"}
+include_graphics("../maps/avgs_by_region3.pdf")
+```
 
 # Analysis
 
