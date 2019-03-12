@@ -21,10 +21,6 @@ rm(list = ls())
 
 # Set working directory and bring in the data and libraries
 
-setwd("C:/Users/mdjmcdonald/Desktop/Final_Project/599/599-Project/maps")
-
-
-
 library(MASS)
 library(maps)
 library(RColorBrewer)
@@ -38,17 +34,20 @@ library(haven)
 library(expss)
 library(histogram)
 library(raster)
+library(sf)
 
 
 # We will use three data frames for this descriptive analysis: a csv file containing our variables of
 # interest and two shapefiles for representing our descriptive variables graphically
 
-hn_data <- read.csv("cleandata.csv")
-hn_spatial <- readOGR(dsn ="HNGE61FL.shp") # SpatialPointsDataFrame
+hn_data <- read.csv("https://github.com/arsell/599-Project/blob/master/data/cleandata.csv?raw=true")
+#hn_spatial <- read_sf(dsn ="https://github.com/arsell/599-Project/blob/master/maps", layer = "HNGE61FL.shp")
+hn_spatial <- readOGR(dsn = "C:/users/arsell/documents/github/599-Project/maps/HNGE61FL.shp") 
+# SpatialPointsDataFrame
 
 # These data are from the GADM country codes, a set of codes for most countries which provides spatial
 # polygon data. The data can be found at: https://gadm.org/download_country_v3.html
-hn_map1 <- readOGR('gadm36_HND_1.shp') #SpatialPolygonDataFrame
+hn_map1 <- readOGR('C:/users/arsell/documents/github/599-project/maps/gadm36_HND_1.shp') #SpatialPolygonDataFrame
 
 ```
 
