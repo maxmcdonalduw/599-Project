@@ -60,18 +60,8 @@ data <- read.csv("https://github.com/arsell/599-Project/blob/master/data/cleanda
 data <- na.omit(data)
 ```
 
-```{r}
-# Investigate age vs educ relationship
-p1 <- ggplot(data = data,
-             aes(x = age,
-                 y = educ)) +
-  geom_point(position = "jitter") +
-  stat_smooth(geom = "smooth")
 
-p1
-```
-
-```{r echo=TRUE, results='hide'}
+```{r echo=FALSE, results='hide'}
 data$religion <- relevel(data$religion, ref="Other")
 
 fit1 <- lm(educ ~ religion + age + region + wealthCat + urban, data=data)
@@ -175,33 +165,61 @@ mae8 <- mae[8] # 2.487023
 
 # Introduction and Motivation
 
-Here we can introduce our central research question. I don't believe citations are crucial to this project, but we can include them if necessary [@FakeyShenanigans2019].
+Our research examines the educational attainment of women in Honduras. While there are many things that can play a role in education, we strive to examine the impact of religion and wealth.
 
 # Data
 
-Here is where we explain where the data comes from. Any descriptive statistics would be included here.
+Our data comes from Demographic and Health Surveys (DHS). Specifically, we pull from the responses of over 15,000 Honduran women in 20XX. The data that we use in our analysis includes years of education, age, religion, wealth, urbanicity, and region.
 
-```{r out.width= "85%"}
-include_graphics("../maps/avgs_by_region1.pdf")
-```
-
-```{r out.width= "85%"}
-include_graphics("../maps/avgs_by_region2.pdf")
-```
-
-```{r out.width= "85%"}
-include_graphics("../maps/avgs_by_region3.pdf")
-```
 
 # Analysis
 
-In this section we explain how our model is set up and any necessary assumptions. Model selection criteria should be included here as well.
+Two primary concerns motivated the model construction. First, we examined the possibility of a curvilinear impact of age on education. The figure below reveals that there is a slight increase in education before a gradual decline in the older generation. Notably, the variance of education also increases with age. We think that there are likely two effects present here. The first is that young adults now are far more likely to pursue education now than they were a few decades ago. Thus, the older generations have lower levels of education. The second effect is that as you age, the probability of attaining additional years of education increases, which is evidence from the initial bump that we observe. Given the cross-sectional nature of our data, we cannot disentangle these effects. As such, we model age as a quadratic function which we believe (and our model diagnostics show) is the best fit for the mix of these effects.
+
+```{r}
+# Investigate age vs educ relationship
+p1 <- ggplot(data = data,
+             aes(x = age,
+                 y = educ)) +
+  geom_point(position = "jitter") +
+  stat_smooth(geom = "smooth") +
+  xlab("Age") +
+  ylab("Years of Education") +
+  ggtitle("Exploration of Non-linear trend in Education by Age")
+
+p1
+```
 
 
+The second concern we have is the heterogenous distribution of key variables across the administrative regions of Honduras. As can be seen in the two figures below, we observe very noticeable differences in both education and wealth across the different regions of Honduras. Additionally, these patterns seem to overlap. To account for the variation across the administrative regions, we fit random intercepts for these regions. We also considered the possibility of included region-fixed effects, but leave-one-out cross-validation revealed that random intercepts performed the best.
+
+```{r out.width= "50%"}
+include_graphics("../maps/avgs_by_region1.pdf")
+include_graphics("../maps/avgs_by_region3.pdf")
+```
+
+```{r eval = FALSE, out.width= "85%"}
+include_graphics("../maps/avgs_by_region2.pdf")
+```
+
+```{r eval = FALSE, out.width= "85%"}
+include_graphics("../maps/avgs_by_region3.pdf")
+```
+
+
+The final model that we fit is defined as the following:
+
+$EDUC_{ij} = \beta_0 + \beta_1 AGE_{ij} + \beta_2 AGE^2_{ij} + \beta_3 WEALTH_{ij} + \beta_4 RELIGION_{ij} + \beta_5 URBAN_{ij} + \mu_j + \epsilon_{ij}$
+
+$\epsilon_{ij} \sim N(0,\sigma^2)$
+
+$\mu_j \sim N(0,\tau^2)$
+
+The years of education for individual $i$ in region $j$ are predicted by the above model where $WEALTH$ and $RELIGION$ are factor variables, and $\mu_j$ is the random intercept for each region.
 
 # Results
 
-We present the results of the model, including tables and/or figures. This should have the direct numerical interpretation of the key coefficients.
+The two primary takeaways are below.
 
 ```{r}
 
@@ -228,6 +246,32 @@ wealth_bar <- ggplot(effs,
   ggtitle("Predicted Education by Wealth")
 
 wealth_bar
+```
+
+```{r}
+
+effs.religion <- as.data.frame(effect(c("religion"), fit4))
+
+data.p2 <- data %>%
+  group_by(religion) %>%
+  summarise(prop_urban = mean(urban))
+effs.religion <- cbind(effs.religion, data.p2[,2])
+
+religion_bar <- ggplot(effs.religion,
+                     aes(x = religion,
+                         y = fit, 
+                         fill = prop_urban)) +
+  geom_col() +
+  geom_errorbar(aes(ymin = lower,
+                    ymax = upper),
+                width=0.2) +
+  xlab("Religion") +
+  ylab("Predicted Years of Education") +
+  labs(fill = "% Urban") +
+  ggtitle("Predicted Education by Religion")
+
+religion_bar
+
 ```
 
 # Conclusion
