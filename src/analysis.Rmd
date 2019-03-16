@@ -169,7 +169,7 @@ Our research examines the educational attainment of women in Honduras. While the
 
 # Data
 
-Our data comes from Demographic and Health Surveys (DHS). Specifically, we pull from the responses of over 15,000 Honduran women in 20XX. The data that we use in our analysis includes years of education, age, religion, wealth, urbanicity, and region.
+Our data comes from Demographic and Health Surveys (DHS). Specifically, we pull from the responses of over 15,000 Honduran women in 2008. The data that we use in our analysis includes years of education, age, religion, wealth, urbanicity, and region.
 
 
 # Analysis
