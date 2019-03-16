@@ -219,7 +219,7 @@ The years of education for individual $i$ in region $j$ are predicted by the abo
 
 # Results
 
-The two primary takeaways are below.
+The two primary takeaways are demonstrated in the figures below. The first result we see is that predicted years of education strongly vary over wealth. Each wealth category gives a significantly different prediction of education. Interestingly, this also correlates strongly with the urbanicity of households as demonstrated by the blue shading.
 
 ```{r}
 
@@ -248,6 +248,9 @@ wealth_bar <- ggplot(effs,
 wealth_bar
 ```
 
+
+The second takeaway is that religion does not appear to be well-correlated with education. While there are more predicted years of education with some religious categories, these differences are not statistically significant. Additionally, urbanicity does not exhibit the same strong pattern it did with wealth.
+
 ```{r}
 
 effs.religion <- as.data.frame(effect(c("religion"), fit4))
@@ -274,12 +277,14 @@ religion_bar
 
 ```
 
+One last interesting result from our model was the variance of the random region intercepts. Nearly all of the variation in our model comes from $\epsilon_{ij}$ as opposed to $\mu_j$. This is an indication that the driving factors of education are things that do not see much variation across the administrative regions of Honduras.
+
 # Conclusion
 
-Discussion of the substantive interpretation of the model, including any meaningful impact of findings as well as limitations of model.
+We went to this data seeking a better understanding of how religion and wealth impacted the educational attainment of women in Honduras, ackowledging that there are many limitations to the conclusions we would be able to draw. Particularly in regard to religion, the survey instrument was not specific enough to really get at the different aspects of religiosity that we would have liked to examine. As such, our analysis is unable to draw any strong conclusions about any patterns between religion and education. Similarly, the wealth data is only available in categorical bins as opposed to continously measured wealth. However, unlike religion, the underlying patterns between wealth and education are so prevalent that our analysis was able to detect them with ease. 
 
-\pagebreak
+Overall, our major takeaway is that wealth is a strong predictor of educational attainment. That relationship is strongly correlated with the urbanicity of household locations, yet persists even when holding constant other factors. This result is consistent with the extant literature which has found that wealth, income, and socioeconomic are all strong predictors of education. 
 
-# References
+
 
 
