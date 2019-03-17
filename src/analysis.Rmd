@@ -38,43 +38,253 @@ references:
 \pagebreak
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
 ```
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 #loading necessary packages
 
 library(lme4)
 library(ggplot2)
+library(dplyr)
+library(effects)
+library(knitr)
+
+options(scipen = 999)
+options(digits = 6)
 ```
 
 
-```{r warning=FALSE}
+```{r}
 data <- read.csv("https://github.com/arsell/599-Project/blob/master/data/cleandata.csv?raw=true")
+data <- na.omit(data)
+```
+
+
+```{r echo=FALSE, results='hide'}
+data$religion <- relevel(data$religion, ref="Other")
+
+fit1 <- lm(educ ~ religion + age + region + wealthCat + urban, data=data)
+summary(fit1)
+
+
+
+fit2 <- lmer(educ ~ religion + age + wealthCat + urban + (1|region),
+             data = data,
+             REML = FALSE)
+summary(fit2)
+
+data$age2 <- data$age^2
+
+fit3 <- lm(educ ~ religion + age + age2 + region + wealthCat + urban, data=data)
+summary(fit3)
+
+fit4 <- lmer(educ ~ religion + age + age2 + wealthCat + urban + (1|region),
+             data = data,
+             REML = FALSE)
+summary(fit4)
+
+fit5 <- lm(educ ~ religion + age + wealthCat*region + urban, data = data)
+summary(fit5)
+
+fit6 <- lmer(educ ~ (1|region),
+             data = data,
+             REML = FALSE)
+summary(fit6)
+
+fit7 <- lmer(educ ~ religion + age + urban + (1 + wealthCat|region),
+             data = data,
+             REML = FALSE)
+summary(fit7)
+
+fit8 <- lmer(educ ~ religion + age + urban + wealthCat + (1 + wealthCat|region),
+             data = data,
+             REML = FALSE)
+summary(fit8)
+```
+
+```{r}
+fit <- list(fit1, fit2, fit3, fit4, fit5, fit6, fit7, fit8)
+
+
+bic.list <- NULL
+for (i in 1:length(fit)){
+  bic.list <- BIC(fit[[i]])
+}
+
+source("functions.R")
+```
+
+```{r eval=FALSE}
+# WARNING: Cross-Validation take a substantial amount of time to run and is not evaluated by default.
+
+
+#Running in serial
+
+mae1 <- get_mae(fit1, data, method="lm")
+mae2 <- get_mae(fit2, data, method="lmer")
+mae3 <- get_mae(fit3, data, method="lm")
+mae4 <- get_mae(fit4, data, method="lmer")
+mae5 <- get_mae(fit5, data, method="lm")
+mae6 <- get_mae(fit6, data, method="lmer")
+mae7 <- get_mae(fit7, data, method="lmer")
+mae8 <- get_mae(fit8, data, method="lmer")
+```
+
+```{r eval=FALSE}
+# WARNING: Cross-Validation take a substantial amount of time to run and is not evaluated by default.
+# Additionally, this chunk is written to take advantage of parallel processing on multiple cores. It should not be run in conjunction with the above chunk.
+
+
+# Running in parallel
+library(parallel)
+library(foreach)
+library(doParallel)
+
+numCores <- detectCores()
+registerDoParallel(numCores)
+
+mae <- foreach (i=1:length(fit), .combine = c) %dopar% {
+  if (i == 1 | i == 3 | i == 5){
+    get_mae_lm(fit[[i]], data)
+  } else {
+    get_mae_lmer(fit[[i]], data)
+  }
+}
+
+mae1 <- mae[1] # 2.496750
+mae2 <- mae[2] # 2.496738
+mae3 <- mae[3] # 2.496008
+mae4 <- mae[4] # 2.495984
+mae5 <- mae[5] # 2.490587
+mae6 <- mae[6] # 3.051729
+mae7 <- mae[7] # 2.489470
+mae8 <- mae[8] # 2.487023
+
 ```
 
 # Introduction and Motivation
 
-Here we can introduce our central research question. I don't believe citations are crucial to this project, but we can include them if necessary [@FakeyShenanigans2019].
+Our research examines the educational attainment of women in Honduras. While there are many things that can play a role in education, we strive to examine the impact of religion and wealth.
 
 # Data
 
-Here is where we explain where the data comes from. Any descriptive statistics would be included here.
+Our data comes from Demographic and Health Surveys (DHS). Specifically, we pull from the responses of over 15,000 Honduran women in 2008. The data that we use in our analysis includes years of education, age, religion, wealth, urbanicity, and region.
+
 
 # Analysis
 
-In this section we explain how our model is set up and any necessary assumptions. Model selection criteria should be included here as well.
+Two primary concerns motivated the model construction. First, we examined the possibility of a curvilinear impact of age on education. The figure below reveals that there is a slight increase in education before a gradual decline in the older generation. Notably, the variance of education also increases with age. We think that there are likely two effects present here. The first is that young adults now are far more likely to pursue education now than they were a few decades ago. Thus, the older generations have lower levels of education. The second effect is that as you age, the probability of attaining additional years of education increases, which is evidence from the initial bump that we observe. Given the cross-sectional nature of our data, we cannot disentangle these effects. As such, we model age as a quadratic function which we believe (and our model diagnostics show) is the best fit for the mix of these effects.
+
+```{r}
+# Investigate age vs educ relationship
+p1 <- ggplot(data = data,
+             aes(x = age,
+                 y = educ)) +
+  geom_point(position = "jitter") +
+  stat_smooth(geom = "smooth") +
+  xlab("Age") +
+  ylab("Years of Education") +
+  ggtitle("Exploration of Non-linear trend in Education by Age")
+
+p1
+```
+
+
+The second concern we have is the heterogenous distribution of key variables across the administrative regions of Honduras. As can be seen in the two figures below, we observe very noticeable differences in both education and wealth across the different regions of Honduras. Additionally, these patterns seem to overlap. To account for the variation across the administrative regions, we fit random intercepts for these regions. We also considered the possibility of included region-fixed effects, but leave-one-out cross-validation revealed that random intercepts performed the best.
+
+```{r out.width= "50%"}
+include_graphics("../maps/avgs_by_region1.pdf")
+include_graphics("../maps/avgs_by_region3.pdf")
+```
+
+```{r eval = FALSE, out.width= "85%"}
+include_graphics("../maps/avgs_by_region2.pdf")
+```
+
+```{r eval = FALSE, out.width= "85%"}
+include_graphics("../maps/avgs_by_region3.pdf")
+```
+
+
+The final model that we fit is defined as the following:
+
+$EDUC_{ij} = \beta_0 + \beta_1 AGE_{ij} + \beta_2 AGE^2_{ij} + \beta_3 WEALTH_{ij} + \beta_4 RELIGION_{ij} + \beta_5 URBAN_{ij} + \mu_j + \epsilon_{ij}$
+
+$\epsilon_{ij} \sim N(0,\sigma^2)$
+
+$\mu_j \sim N(0,\tau^2)$
+
+The years of education for individual $i$ in region $j$ are predicted by the above model where $WEALTH$ and $RELIGION$ are factor variables, and $\mu_j$ is the random intercept for each region.
 
 # Results
 
-We present the results of the model, including tables and/or figures. This should have the direct numerical interpretation of the key coefficients.
+The two primary takeaways are demonstrated in the figures below. The first result we see is that predicted years of education strongly vary over wealth. Each wealth category gives a significantly different prediction of education. Interestingly, this also correlates strongly with the urbanicity of households as demonstrated by the blue shading.
+
+```{r}
+
+effs <- as.data.frame(effect(c("wealthCat"), fit4))
+
+data.p1 <- data %>%
+  group_by(wealthCat) %>%
+  summarise(prop_urban = mean(urban))
+effs <- cbind(effs, data.p1[,2])
+
+effs$wealthCat <- reorder(effs$wealthCat, effs$fit)
+
+wealth_bar <- ggplot(effs,
+                     aes(x = wealthCat,
+                         y = fit, 
+                         fill = prop_urban)) +
+  geom_col() +
+  geom_errorbar(aes(ymin = lower,
+                    ymax = upper),
+                width=0.2) +
+  xlab("Wealth Category") +
+  ylab("Predicted Years of Education") +
+  labs(fill = "% Urban") +
+  ggtitle("Predicted Education by Wealth")
+
+wealth_bar
+```
+
+
+The second takeaway is that religion does not appear to be well-correlated with education. While there are more predicted years of education with some religious categories, these differences are not statistically significant. Additionally, urbanicity does not exhibit the same strong pattern it did with wealth.
+
+```{r}
+
+effs.religion <- as.data.frame(effect(c("religion"), fit4))
+
+data.p2 <- data %>%
+  group_by(religion) %>%
+  summarise(prop_urban = mean(urban))
+effs.religion <- cbind(effs.religion, data.p2[,2])
+
+religion_bar <- ggplot(effs.religion,
+                     aes(x = religion,
+                         y = fit, 
+                         fill = prop_urban)) +
+  geom_col() +
+  geom_errorbar(aes(ymin = lower,
+                    ymax = upper),
+                width=0.2) +
+  xlab("Religion") +
+  ylab("Predicted Years of Education") +
+  labs(fill = "% Urban") +
+  ggtitle("Predicted Education by Religion")
+
+religion_bar
+
+```
+
+One last interesting result from our model was the variance of the random region intercepts. Nearly all of the variation in our model comes from $\epsilon_{ij}$ as opposed to $\mu_j$. This is an indication that the driving factors of education are things that do not see much variation across the administrative regions of Honduras.
 
 # Conclusion
 
-Discussion of the substantive interpretation of the model, including any meaningful impact of findings as well as limitations of model.
+We went to this data seeking a better understanding of how religion and wealth impacted the educational attainment of women in Honduras, ackowledging that there are many limitations to the conclusions we would be able to draw. Particularly in regard to religion, the survey instrument was not specific enough to really get at the different aspects of religiosity that we would have liked to examine. As such, our analysis is unable to draw any strong conclusions about any patterns between religion and education. Similarly, the wealth data is only available in categorical bins as opposed to continously measured wealth. However, unlike religion, the underlying patterns between wealth and education are so prevalent that our analysis was able to detect them with ease. 
 
-\pagebreak
+Overall, our major takeaway is that wealth is a strong predictor of educational attainment. That relationship is strongly correlated with the urbanicity of household locations, yet persists even when holding constant other factors. This result is consistent with the extant literature which has found that wealth, income, and socioeconomic are all strong predictors of education. 
 
-# References
+
 
 
