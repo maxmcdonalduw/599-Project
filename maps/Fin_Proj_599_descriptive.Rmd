@@ -41,6 +41,7 @@ library(sf)
 # interest and two shapefiles for representing our descriptive variables graphically
 
 hn_data <- read.csv("https://github.com/arsell/599-Project/blob/master/data/cleandata.csv?raw=true")
+hn_data <- na.omit(hn_data)
 #hn_spatial <- read_sf(dsn ="https://github.com/arsell/599-Project/blob/master/maps", layer = "HNGE61FL.shp")
 hn_spatial <- readOGR(dsn = "C:/users/arsell/documents/github/599-Project/maps/HNGE61FL.shp") 
 # SpatialPointsDataFrame
@@ -120,15 +121,22 @@ spplot(hn_map1, "avg_wealthDec", col.regions=colorRampPalette(brewer.pal(8, "Gre
 
 ## Let's send the plots to a pdf in the working directory, titled "avgs_by_region"
 
-pdf("avgs_by_region.pdf", height=6, width=6)
+pdf("avgs_by_region1.pdf", height=6, width=6)
 
 spplot(hn_map1, "avg_educ", col.regions=colorRampPalette(brewer.pal(8, "Purples"))(50), main="Average education", 
        xlab="Longitude", ylab="Latitude")
 
+dev.off()
+
+pdf("avgs_by_region2.pdf", height=6, width=6)
 
 spplot(hn_map1, "avg_age", col.regions=colorRampPalette(brewer.pal(8, "Blues"))(50),
        main="Average age", 
        xlab="Longitude", ylab="Latitude") 
+
+dev.off()
+
+pdf("avgs_by_region3.pdf", height=6, width=6)
 
 spplot(hn_map1, "avg_wealthDec", col.regions=colorRampPalette(brewer.pal(8, "Greens"))(50),
        main="Average wealth", 
